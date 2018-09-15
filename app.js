@@ -1,5 +1,11 @@
 const state = {
 
+    name:'',
+    command:'',
+    officeNum:'',
+    phoneNum:'',
+
+
     employeeList: [
         {
             name: 'Jan',
@@ -41,56 +47,86 @@ const state = {
             officeNum: 345,
             phoneNum: '(222)-789-5231'
         }
-    ]
+    ],
+
+    render: function(htmlStr){
+        $('#list').html(htmlStr);
+    }
 }
 
-let command = '';
+
 
 const runCommand = function(e){
     e.preventDefault();
-    switch (command){
+    switch (state.command){
     case 'print':
     let htmlStr ='';
     state.employeeList.forEach(e => htmlStr += `<div class='box'>Name: ${e.name}<br> Office Number: ${e.officeNum}<br> Phone: ${e.phoneNum} </div>` )
-    render(htmlStr);
+    state.render(htmlStr);
     break;
     case 'verify':
     name = $('#name').val();
     const match = state.employeeList.find(e => e.name.toLowerCase() === name.toLowerCase());
     if (match){
-        render(`<div class='box'>Employee Found</div>`);
+        state.render(`<div class='box'>Employee Found</div>`);
       }else {
-        render(`<div class='box'>Employee Not Found</div>`);
+        state.render(`<div class='box'>Employee Not Found</div>`);
       }
     break;
     case 'lookup':
     nameLookup = $('#name').val();
     const matchLookup = state.employeeList.find(e => e.name.toLowerCase() === nameLookup.toLowerCase());
     if (matchLookup){
-        render(`<div class='box'>Name: ${matchLookup.name}<br> Office Number: ${matchLookup.officeNum}<br> Phone: ${matchLookup.phoneNum} </div>`);
+        state.render(`<div class='box'>Name: ${matchLookup.name}<br> Office Number: ${matchLookup.officeNum}<br> Phone: ${matchLookup.phoneNum} </div>`);
       }else {
-        render(`<div class='box'>Employee Not Found</div>`);
+        state.render(`<div class='box'>Employee Not Found</div>`);
+      }
+    break;
+    case 'contain':
+    let containStr = ''
+    nameContain = $('#name').val();
+    if (nameContain){
+        state.employeeList.filter(e => e.name.toLowerCase().includes(nameContain.toLowerCase()))
+    .forEach(e => containStr += `<div class='box'>Name: ${e.name}<br> Office Number: ${e.officeNum}<br> Phone: ${e.phoneNum} </div>`);
+        state.render(containStr || `<div class='box'>Employee Not Found</div>`);
+    }
+    break;
+    case 'update':
+    state.name = $('#name').val();
+    state.officeNum = $('#office').val();
+    state.phoneNum = $('#phone').val();
+    const nameMatch = state.employeeList.find(e => e.name.toLowerCase() === state.name.toLowerCase());
+    if (nameMatch){
+        nameMatch.officeNum = state.officeNum;
+        nameMatch.phoneNum = state.phoneNum;
+        state.render(`<div class='box'>Name: ${nameMatch.name}<br> Office Number: ${nameMatch.officeNum}<br> Phone: ${nameMatch.phoneNum} </div>`);
+      }else {
+        state.render(`<div class='box'>Employee Not Found</div>`); 
       }
     break;
     }
-   
+    
 };
 
 
 
 const print = function () {
-    command = 'print';
+    state.command = 'print';
     $('#submit').removeClass('hide');
     $('.header2a').addClass('header2b');
     $('.header').addClass('hide')
     $('#list').empty();
     $('#name').addClass('hide');
+    $('#office').addClass('hide');
+    $('#phone').addClass('hide');
 }
 
 const verify = function (){
-    command = 'verify'
+    state.command = 'verify'
     $('#submit').removeClass('hide');
     $('#name').removeClass('hide');
+    $('#office').addClass('hide');
+    $('#phone').addClass('hide');
     $('.header2a').addClass('header2b');
     $('.header').addClass('hide');
     $('#list').empty();
@@ -98,39 +134,48 @@ const verify = function (){
 }
 
 const lookup = function (){
-    command = 'lookup'
+    state.command = 'lookup'
     $('#submit').removeClass('hide');
     $('#name').removeClass('hide');
+    $('#office').addClass('hide');
+    $('#phone').addClass('hide');
     $('.header2a').addClass('header2b');
     $('.header').addClass('hide');
     $('#list').empty();
-
 }
 
-const render =function (htmlStr){
-$('#list').html(htmlStr);
+const contain = function (){
+    state.command = 'contain'
+    $('#submit').removeClass('hide');
+    $('#name').removeClass('hide');
+    $('#office').addClass('hide');
+    $('#phone').addClass('hide');
+    $('.header2a').addClass('header2b');
+    $('.header').addClass('hide');
+    $('#list').empty();
 }
 
-const showForm = function () {
-    $('#submit').addClass('show');
-
+const update = function (){
+    state.command = 'update'
+    $('#submit').removeClass('hide');
+    $('#name').removeClass('hide');
+    $('#office').removeClass('hide');
+    $('#phone').removeClass('hide');
+    $('.header2a').addClass('header2b');
+    $('.header').addClass('hide');
+    $('#list').empty();
 }
+
+// const render =function (htmlStr){
+// $('#list').html(htmlStr);
+// }
 
 $('#print').on('click', print )
 $('#verify').on('click', verify)
 $('#lookup').on('click', lookup)
-$('#submit').on('click', runCommand)
+$('#contain').on('click', contain)
+$('#update').on('click', update)
+$('#submit').on('click', runCommand);
 
 
 
-
-
-
-
-// const minimalB = function(){
-//     $('input').addClass('header2b');
-// }
-
-// const minimalA = function(){
-//     $('input').addClass('header2a');
-// }
