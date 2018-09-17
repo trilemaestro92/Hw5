@@ -195,8 +195,8 @@ const deleter = function () {
     state.command = 'deleter'
     $('#submit').removeClass('hide');
     $('#name').removeClass('hide');
-    // $('#office').removeClass('hide');
-    // $('#phone').removeClass('hide');
+    $('#office').addClass('hide');
+    $('#phone').addClass('hide');
     $('.header2a').addClass('header2b');
     $('.header').addClass('hide');
     $('#list').empty();
