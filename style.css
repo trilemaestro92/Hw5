@@ -37,6 +37,7 @@ main {
     grid-template-rows: 50px 100px repeat(4, 1fr) ;
     grid-template-columns: 200px repeat(4, 1fr) ;
     
+    
 }
 main::after {
   height: auto;
